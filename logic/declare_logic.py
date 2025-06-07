@@ -9,6 +9,7 @@ import api.system.opt_locking.opt_locking as opt_locking
 from security.system.authorization import Grant, Security
 from logic.load_verify_rules import load_verify_rules
 import integration.kafka.kafka_producer as kafka_producer
+from integration.n8n.n8n_producer import send_n8n_message
 import logging
 
 app_logger = logging.getLogger(__name__)
@@ -30,6 +31,30 @@ def declare_logic():
         # Outside WG: load declare_logic function
         from logic.logic_discovery.auto_discovery import discover_logic
         discover_logic()
+
+    # Logic from GenAI: (or, use your IDE w/ code completion)
+    from database.models import Product, Order, Item, Customer, SysEmail
+
+    # Ensure the customer's balance is less than their credit limit
+    Rule.constraint(validate=Customer, as_condition=lambda row: row.balance <= row.credit_limit, error_msg="Customer balance ({row.balance}) exceeds credit limit ({row.credit_limit})")
+
+    # Derive the customer's balance as the sum of order totals where not yet shipped.
+    Rule.sum(derive=Customer.balance, as_sum_of=Order.amount_total, where=lambda row: row.date_shipped is None)
+
+    # Derive the order's total amount from the sum of item amounts.
+    Rule.sum(derive=Order.amount_total, as_sum_of=Item.amount)
+
+    # Calculate item amount based on quantity and unit price.
+    Rule.formula(derive=Item.amount, as_expression=lambda row: row.quantity * row.unit_price)
+
+    # Copy unit price from product to item.
+    Rule.copy(derive=Item.unit_price, from_parent=Product.unit_price)
+
+    # Send order details to Kafka if order is shipped.
+    Rule.after_flush_row_event(on_class=Order, calling=kafka_producer.send_row_to_kafka, if_condition=lambda row: row.date_shipped is not None, with_args={'topic': 'order_shipping'})
+
+    # End Logic from GenAI
+    
 
     def handle_all(logic_row: LogicRow):  # #als: TIME / DATE STAMPING, OPTIMISTIC LOCKING
         """
@@ -53,7 +78,7 @@ def declare_logic():
         Grant.process_updates(logic_row=logic_row)
 
         did_stamping = False
-        if enable_stamping := False:  # #als:  DATE / USER STAMPING
+        if enable_stamping := True:  # #als:  DATE / USER STAMPING
             row = logic_row.row
             if logic_row.ins_upd_dlt == "ins" and hasattr(row, "CreatedOn"):
                 row.CreatedOn = datetime.datetime.now()

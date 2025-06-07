@@ -1,12 +1,12 @@
 about:
-  date: June 07, 2025 13:16:06
+  date: May 26, 2025 06:57:17
   recent_changes: works with modified safrs-react-admin
   version: 0.0.0
 api_root: '{http_type}://{swagger_host}:{port}/{api}'
 authentication: '{system-default}'
 info:
-  number_relationships: 3
-  number_tables: 4
+  number_relationships: 4
+  number_tables: 6
 info_toggle_checked: true
 resources:
   Customer:
@@ -29,6 +29,11 @@ resources:
       - customer_id
       name: OrderList
       resource: Order
+    - direction: tomany
+      fks:
+      - customer_id
+      name: SysEmailList
+      resource: SysEmail
     type: Customer
     user_key: name
   Item:
@@ -104,6 +109,37 @@ resources:
       resource: Item
     type: Product
     user_key: name
+  SysEmail:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: customer_id
+      required: true
+    - name: message
+    - name: subject
+    - name: CreatedOn
+      type: DATE
+    tab_groups:
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    type: SysEmail
+    user_key: id
+  SysMcp:
+    attributes:
+    - name: request
+      type: textarea
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      show_when: isInserting == false
+    type: SysMcp
+    user_key: id
 settings:
   HomeJS: /admin-app/home.js
   max_list_columns: 8
