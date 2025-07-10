@@ -5,6 +5,8 @@ version: 0.22 from docsite, for readme 5/24/2025
 ---
 We'll illustrate [API Logic Server](https://www.genai-logic.com/product/key-features) basic GenAI-Logic operation: creating projects from new or existing databases, adding logic and security, and customizing your project using your IDE and Python.
 
+> ***Important: see the procedural vs declarative comparison written by ChatGPT - [click here](logic/declarative-vs-procedural-comparison.md)***
+
 The entire process takes 20 minutes; usage notes:
 
 * Important: look for **readme files** in created projects.
