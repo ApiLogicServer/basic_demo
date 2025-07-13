@@ -1,5 +1,21 @@
 # Declarative vs Procedural Business Logic: A Comprehensive Comparison
 
+## Foreword
+
+With the exception of this foreword, this document was produced by Copilot, from this scenario:
+
+1. Build the `basic_demo` project [as described here](https://apilogicserver.github.io/Docs/Sample-Basic-Demo/).
+2. We asked CoPilot to **rebuild the logic *without LogicBank*** - that is, using a procedural approach: `logic/procedural_logic.py`
+3. We asked Copilot: **what would happen of the orders' customer-id were changed?**
+    * Copilot accepted this as a serious error, and made the bug fix.
+4. We then asked Copilot: *what if the items' product-id were changed?*
+    * Copilot became agitated at finding another bug...
+    * It fixed it, and - **unprompted - provided the following analysis.**
+
+<br>
+
+
+
 ## TL;DR
 
 **LogicBank declarative rules provide a 44X reduction in code complexity** compared to traditional procedural implementations:
