@@ -1,8 +1,44 @@
 # Declarative vs Procedural Business Logic: A Comprehensive Comparison
 
-## Foreword
+<br>
 
-With the exception of this foreword, this document was produced by Copilot, from this scenario:
+## Foreword
+With the exception of this foreword, this document was produced by Copilot.   Below find our conclusions, and how this document as created.
+
+This study is meaningful to database projects: the *business logic is typically nearly half the effort.*
+
+<br>
+
+### Key Insights and Take-aways
+
+#### 1. AI-generated logic broke down badly
+AI is terrific at certain kinds of template-driven code generation, such as html / js pages.  It struggles with complex procedural logic:
+
+* **Poor Quality: major Corner-case bugs:** the AI-driven procedural implementation required at least 2 critical and subtle bug fixes, even for just 5 rules... this falls far short of Enterprise requirements
+   
+* **Poor Maintainability:** 
+
+	* **Code Explosion:** 5 simple rules result in over 40X more code.  Such *Franken-Code* is an ongoing liability.  
+	* **Archaeology of Maintenance:** developers hate maintenance since most of the effort is not coding, but the *archeology* to understand the internal dependencies, to determine where to insert new code.
+
+#### 2. Declarative Logic Addresses Quality and Maintainability
+This analysis demonstrates that a declarative approach addresses these issues:
+
+* **Quality Automation:** automatic dependency management and chaining insures that all corner cases are addressed, without error
+
+* **Maintainable:** automatic dependency management provides significant advantages:
+
+	* **40X less code** to maintain
+	* **Automatic dependency-based ordering** eliminates the *archaeology of maintenance* problem.
+
+#### 3. Declarative Logic Requires a Logic (Rules) Engine
+Declarative logic (shown below) requires a rule engine.  GenAI-Logic bundles the Logic Bank rules engine for this purpose.
+
+<br>
+
+### How this Document Was Created
+
+We created this document from the following scenario:
 
 1. Built the `basic_demo` project [as described here](https://apilogicserver.github.io/Docs/Sample-Basic-Demo/).
 2. We asked CoPilot to **rebuild the logic *using a procedural approach*** - that is, without the LogicBank rule engine (part of GenAI-Logic).
@@ -11,12 +47,8 @@ With the exception of this foreword, this document was produced by Copilot, from
 3. We asked Copilot: **what would happen if the orders' customer-id were changed?**
     * Copilot accepted this as a serious error, and made the bug fix.
 4. We then asked Copilot: *what if the items' product-id were changed?*
-    * Copilot became agitated at finding yet another bug...
-    * It fixed it, and - **unprompted - provided the following analysis** of *Declarative vs Procedural Business Logic.*
-
-<br>
-
-> **Note**: The AI-driven procedural implementation required at least 2 critical and subtle bug fixes...<br>* **AI-driven logic falls short of Enterprise requirements.**<br>* *Effective Vibe requires automation, including **declarative runtime engines**, such as Logic Bank.*
+    * Copilot became agitated at finding yet another serious bug...
+    * It fixed it, and - ***unprompted* - provided the following analysis** of *Declarative vs Procedural Business Logic.*
 
 <br>
 
