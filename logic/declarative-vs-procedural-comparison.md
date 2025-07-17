@@ -7,7 +7,7 @@ With the exception of this foreword, this document was produced by Copilot.   Be
 
 > This study is meaningful to database projects: the *business logic is typically nearly half the effort.*
 
-[GenAI-Logic](https://www.genai-logic.com) is free and open source, so you can install it to explore declarative logic - [click here](https://apilogicserver.github.io/Docs/Install-Express/).
+[GenAI-Logic](https://www.genai-logic.com) is free and open source, so you can install it to explore declarative logic - [click here](https://apilogicserver.github.io/Docs/Install-Express/).  This project is available in github - [click here](https://github.com/ApiLogicServer/basic_demo/blob/main/logic/declarative-vs-procedural-comparison.md).
 
 <br>
 
