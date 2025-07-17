@@ -3,23 +3,27 @@
 <br>
 
 ## Foreword
-With the exception of this foreword, this document was produced by Copilot.   Below find our conclusions, and how this document as created.
+With the exception of this foreword, this document was produced by Copilot.   Below find our Take-aways, and how this document as created.
 
-This study is meaningful to database projects: the *business logic is typically nearly half the effort.*
+> This study is meaningful to database projects: the *business logic is typically nearly half the effort.*
+
+[GenAI-Logic](https://www.genai-logic.com) is free and open source, so you can install it to explore declarative logic - [click here](https://apilogicserver.github.io/Docs/Install-Express/).
 
 <br>
 
-### Key Insights and Take-aways
+### Key Take-aways
 
-#### 1. AI-generated logic broke down badly
-AI is terrific at certain kinds of template-driven code generation, such as html / js pages.  It struggles with complex procedural logic:
+#### 1. AI-generated *procedural logic* broke down badly
+AI is terrific at certain kinds of template-driven code generation, such as html / js pages.  It struggled with complex procedural logic:
 
 * **Poor Quality: major Corner-case bugs:** the AI-driven procedural implementation required at least 2 critical and subtle bug fixes, even for just 5 rules... this falls far short of Enterprise requirements
    
 * **Poor Maintainability:** 
 
-	* **Code Explosion:** 5 simple rules result in over 40X more code.  Such *Franken-Code* is an ongoing liability.  
+	* **40X Code Explosion:** 5 simple rules result in over 40X more code.  Such *Franken-Code* is an ongoing maintenance burden.  
 	* **Archaeology of Maintenance:** developers hate maintenance since most of the effort is not coding, but the *archeology* to understand the internal dependencies, to determine where to insert new code.
+
+<br>
 
 #### 2. Declarative Logic Addresses Quality and Maintainability
 This analysis demonstrates that a declarative approach addresses these issues:
@@ -31,8 +35,14 @@ This analysis demonstrates that a declarative approach addresses these issues:
 	* **40X less code** to maintain
 	* **Automatic dependency-based ordering** eliminates the *archaeology of maintenance* problem.
 
+<br>
+
 #### 3. Declarative Logic Requires a Logic (Rules) Engine
-Declarative logic (shown below) requires a rule engine.  GenAI-Logic bundles the Logic Bank rules engine for this purpose.
+Declarative logic (shown below) requires a rule engine.  GenAI-Logic bundles the LogicBank rules engine for this purpose.
+
+Unlike translation into procedural code, translating logic into rules is reliable and easy to understand. GenAI-Logic provides logic training for this purpose (see `docs/training/logic_bank_api.prompt`). 
+
+The resultant rules look like logic with syntax sugar.  ***Executable requirements*** have always been a goal; it's achieved by combining AI, rules training, and a logic engine.
 
 <br>
 
