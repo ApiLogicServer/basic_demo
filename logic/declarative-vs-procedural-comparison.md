@@ -3,46 +3,26 @@
 <br>
 
 ## Foreword
-With the exception of this foreword, this document was produced by Copilot.   Below find our Take-aways, and how this document as created.
 
-> This study is meaningful to database projects: the *business logic is typically nearly half the effort.*
+This document presents a real-world A/B comparison of two approaches to implementing the **same business logic requirements.**  We asked AI to generate both a **procedural** implementation using conventional code, and a **declarative** implementation using the LogicBank rules engine. 
+
+This experiment highlights fundamental differences between the two approaches, and what they mean for building reliable, maintainable systems.  It's important, because business logic typically represents *nearly half the effort* in database projects. 
+
+When asked to produce logic, AI (by itself) defaults to procedural code — because that’s all it knows. This study uncovered two critical problems with that approach:
+1. **Quality:** The AI-generated procedural code contained subtle but serious bugs, even for just five rules—falling far short of basic reliability.
+2.	**Maintainability:** The procedural implementation exploded to over 200 lines — more than 40X the size of its declarative equivalent — creating “Franken-Code” that is brittle, opaque, and costly to maintain.
+
+By contrast, the declarative approach was error free, and 5 Python statements.
+
+The answer isn’t to reject AI. Its speed and simplicity are transformative. The key is to **teach AI about declarative rules** so it can produce concise, expressive rules instead of hundreds of lines of brittle procedural code. These rules are then executed by an **automated runtime engine** (like LogicBank), ensuring correctness, scalability, and maintainability — while preserving the velocity that makes AI so valuable.
+
+By combining AI with declarative automation, GenAI-Logic delivers the best of both worlds: rapid development and enterprise-grade governance.
+
+<br>
+
+### Deeper Dive
 
 [GenAI-Logic](https://www.genai-logic.com) is free and open source, so you can install it to explore declarative logic - [click here](https://apilogicserver.github.io/Docs/Install-Express/).  This project is available in github - [click here](https://github.com/ApiLogicServer/basic_demo/blob/main/logic/declarative-vs-procedural-comparison.md).
-
-<br>
-
-### Key Take-aways
-
-#### 1. AI-generated *procedural logic* broke down badly
-AI is terrific at certain kinds of template-driven code generation, such as html / js pages.  It struggled with complex procedural logic:
-
-* **Poor Quality: major Corner-case bugs:** the AI-driven procedural implementation required at least 2 critical and subtle bug fixes, even for just 5 rules... this falls far short of Enterprise requirements
-   
-* **Poor Maintainability:** 
-
-	* **40X Code Explosion:** 5 simple rules result in over 40X more code.  Such *Franken-Code* is an ongoing maintenance burden.  
-	* **Archaeology of Maintenance:** developers hate maintenance since most of the effort is not coding, but the *archeology* to understand the internal dependencies, to determine where to insert new code.
-
-<br>
-
-#### 2. Declarative Logic Addresses Quality and Maintainability
-This analysis demonstrates that a declarative approach addresses these issues:
-
-* **Quality Automation:** automatic dependency management and chaining insures that all corner cases are addressed, without error
-
-* **Maintainable:** automatic dependency management provides significant advantages:
-
-	* **40X less code** to maintain
-	* **Automatic dependency-based ordering** eliminates the *archaeology of maintenance* problem.
-
-<br>
-
-#### 3. Declarative Logic Requires a Logic (Rules) Engine
-Declarative logic (shown below) requires a rule engine.  GenAI-Logic bundles the LogicBank rules engine for this purpose.
-
-Unlike translation into procedural code, translating logic into rules is reliable and easy to understand. GenAI-Logic provides logic training for this purpose (see `docs/training/logic_bank_api.prompt`). 
-
-The resultant rules look like logic with syntax sugar.  ***Executable requirements*** have always been a goal; it's achieved by combining AI, rules training, and a logic engine.
 
 <br>
 
@@ -62,7 +42,7 @@ We created this document from the following scenario:
 
 <br>
 
-> Here's Copilot, in its own words.
+> Here's the Copilot analysis, in its own words.
 
 <br>
 
