@@ -18,6 +18,8 @@ The answer isn’t to reject AI. Its speed and simplicity are transformative. Th
 
 By combining AI with declarative automation, GenAI-Logic delivers the best of both worlds: rapid development and enterprise-grade governance.
 
+![visually](declarative-vs-procedural-comparison.png)
+
 <br>
 
 ### Deeper Dive
