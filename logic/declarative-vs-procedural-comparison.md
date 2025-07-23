@@ -1,9 +1,17 @@
-# Page Moved
+# ⚠️ PAGE MOVED
 
-This page has moved to: [procedural/declarative-vs-procedural-comparison.md](procedural/declarative-vs-procedural-comparison.md)
+## This document has moved to a new location!
 
-**New Location:** `logic/procedural/declarative-vs-procedural-comparison.md`
+**NEW LOCATION:** 
+- 📄 **Source (GitHub):** https://github.com/ApiLogicServer/basic_demo/blob/main/logic/procedural/declarative-vs-procedural-comparison.md
+- 🌐 **Rendered (GitHub Pages):** https://apilogicserver.github.io/basic_demo/logic/procedural/declarative-vs-procedural-comparison.html
 
 ---
 
-*This file exists to maintain GitHub blob URL compatibility for existing links.*
+### Quick Links:
+- **[👆 Click here to view the document](https://github.com/ApiLogicServer/basic_demo/blob/main/logic/procedural/declarative-vs-procedural-comparison.md)**
+- **[🌐 View rendered version](https://apilogicserver.github.io/basic_demo/logic/procedural/declarative-vs-procedural-comparison.html)**
+
+---
+
+*This file serves as a redirect placeholder for existing bookmarks and links.*
