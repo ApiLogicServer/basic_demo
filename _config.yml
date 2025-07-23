@@ -1,7 +1,4 @@
 # GitHub Pages / Jekyll Configuration
-plugins:
-  - jekyll-redirect-from
-
 # Enable processing of markdown files
 markdown: kramdown
 highlighter: rouge
