@@ -2,7 +2,7 @@
 
 ## This document has moved to a new location!
 
-**[👆 Click here to view the document](https://apilogicserver.github.io/basic_demo/logic/procedural/declarative-vs-procedural-comparison.html)**
+**[👆 Click here to view the document](https://github.com/ApiLogicServer/basic_demo/blob/main/logic/procedural/declarative-vs-procedural-comparison.md)**
 
 ---
 
