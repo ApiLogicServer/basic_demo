@@ -28,10 +28,11 @@
                 "ms-python.isort",
 				// "ms-python.debugpy",
 				"atariq11700.debugpy-old"
-            ],
-            "settings": {
-                "python.defaultInterpreterPath": "/usr/local/bin/python"
-            }
+            ]
+			,
+            // "settings": {
+            //    "python.defaultInterpreterPath": "/usr/local/bin/python"
+            // }
         }
     },
 	
