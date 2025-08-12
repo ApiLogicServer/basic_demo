@@ -18,7 +18,6 @@ CREATE TABLE "Role" (
   PRIMARY KEY (name)
 );
 
-INSERT INTO "Role" VALUES ('sa');
 
 --
 -- Table structure for table User
@@ -56,4 +55,3 @@ CREATE TABLE "UserRole" (
   CONSTRAINT in_role FOREIGN KEY (role_name) REFERENCES "Role" (name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-INSERT INTO "UserRole" VALUES ('admin',NULL,'sa');

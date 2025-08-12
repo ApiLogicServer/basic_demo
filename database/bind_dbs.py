@@ -1,6 +1,9 @@
 from safrs import SAFRSAPI
 import logging as logging  # additional per-database imports
 
+# TODO remove from api import mcp_expose_api_models
+from database import mcp_models
+        
 app_logger = logging.getLogger("api_logic_server_app")
 
 '''
@@ -16,6 +19,7 @@ def bind_dbs(flask_app):
     flask_app.config.update(SQLALCHEMY_BINDS = {
       'authentication': flask_app.config['SQLALCHEMY_DATABASE_URI_AUTHENTICATION'],
       'landing_page' : flask_app.config['SQLALCHEMY_DATABASE_URI_LANDING']
+, 		'mcp': flask_app.config['SQLALCHEMY_DATABASE_URI_MCP']
     })  # make multiple databases available to SQLAlchemy
 
     return

@@ -133,6 +133,12 @@ class Config:
     SQLALCHEMY_DATABASE_URI : typing.Optional[str] = f"sqlite:///{db_path}"
     # override SQLALCHEMY_DATABASE_URI here as required
 
+    # Python 3.13+ compatibility: Convert PostgreSQL URLs to use psycopg3
+    import sys
+    if sys.version_info >= (3, 13) and SQLALCHEMY_DATABASE_URI.startswith('postgresql://'):
+        SQLALCHEMY_DATABASE_URI = SQLALCHEMY_DATABASE_URI.replace('postgresql://', 'postgresql+psycopg://')
+        app_logger.debug(f'config.py - converted PostgreSQL URL for Python 3.13+: {SQLALCHEMY_DATABASE_URI}')
+
     BACKTIC_AS_QUOTE = False # use backtic as quote for table names for API Bridge
     if SQLALCHEMY_DATABASE_URI.startswith("mysql") or SQLALCHEMY_DATABASE_URI.startswith("mariadb"):
         BACKTIC_AS_QUOTE = True
@@ -145,6 +151,11 @@ class Config:
     if os.getenv('SQLALCHEMY_DATABASE_URI'):  # e.g. export SECURITY_ENABLED=true
         SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
         app_logger.debug(f'.. overridden from env variable: {SQLALCHEMY_DATABASE_URI}')
+        
+        # Python 3.13+ compatibility: Convert PostgreSQL URLs to use psycopg3 (for env override)
+        if sys.version_info >= (3, 13) and SQLALCHEMY_DATABASE_URI.startswith('postgresql://'):
+            SQLALCHEMY_DATABASE_URI = SQLALCHEMY_DATABASE_URI.replace('postgresql://', 'postgresql+psycopg://')
+            app_logger.debug(f'config.py - converted PostgreSQL URL for Python 3.13+: {SQLALCHEMY_DATABASE_URI}')
 
 
     # KEYCLOAK Args
@@ -162,28 +173,26 @@ class Config:
     ''' keycloak client id '''
 
     SECURITY_ENABLED = os.getenv("SECURITY_ENABLED",False)
-    SECURITY_PROVIDER = None
+    SECURITY_PROVIDER =  os.getenv('SECURITY_PROVIDER', None)  # type: ignore # type: str
     if os.getenv('SECURITY_ENABLED'):  # e.g. export SECURITY_ENABLED=true
-        security_export = os.getenv('SECURITY_ENABLED')  # type: ignore # type: str
-        security_export = security_export.lower()  # type: ignore
-        if security_export in ["false", "no"]:  # NO SEC
-            SECURITY_ENABLED = False  # to remove env: unset SECURITY_ENABLED
-        else:
-            SECURITY_ENABLED = True
-        app_logger.debug(f'Security .. overridden from env variable: {SECURITY_ENABLED}')
+        security_export = os.getenv('SECURITY_ENABLED','false').lower()  # type: ignore # type: str
+        SECURITY_ENABLED = security_export not in ["false", "no"]  # NO SEC
+        app_logger.debug(f'Security .. overridden from env variable SECURITY_ENABLED: {SECURITY_ENABLED}')
     if SECURITY_ENABLED:
-        from security.authentication_provider.sql.auth_provider import Authentication_Provider
+        from security.authentication_provider.sql.auth_provider import Authentication_Provider as SQL_Authentication_Provider
+        from security.authentication_provider.keycloak.auth_provider import Authentication_Provider as KC_Authentication_Provider
         # typically, authentication_provider is [ keycloak | sql ]
-        SECURITY_PROVIDER = Authentication_Provider
-        app_logger.debug(f'config.py - security enabled')
-    else:
-        app_logger.info(f'config.py - security disabled')
-	
-    app_logger.info(f'SECURITY_PROVIDER={SECURITY_PROVIDER}')
+        SECURITY_PROVIDER = KC_Authentication_Provider if "keycloak" in str(SECURITY_PROVIDER).lower() else SQL_Authentication_Provider
+    
+    app_logger.info(f'config.py - security enabled: {SECURITY_ENABLED} using SECURITY_PROVIDER: {str(SECURITY_PROVIDER)}\n')
 
     # Begin Multi-Database URLs (from ApiLogicServer add-db...)
     auth_db_path = str(project_path.joinpath('database/authentication_db.sqlite'))
     SQLALCHEMY_DATABASE_URI_AUTHENTICATION = f'sqlite:///{auth_db_path}'
+    # Python 3.13+ compatibility: Convert PostgreSQL URLs to use psycopg3 (for env override)
+    if sys.version_info >= (3, 13) and SQLALCHEMY_DATABASE_URI_AUTHENTICATION.startswith('postgresql://'):
+        SQLALCHEMY_DATABASE_URI_AUTHENTICATION = SQLALCHEMY_DATABASE_URI_AUTHENTICATION.replace('postgresql://', 'postgresql+psycopg://')
+        app_logger.debug(f'config.py - converted PostgreSQL URL for Python 3.13+: {SQLALCHEMY_DATABASE_URI_AUTHENTICATION}')
     app_logger.info(f'config.py - SQLALCHEMY_DATABASE_URI_AUTHENTICATION: {SQLALCHEMY_DATABASE_URI_AUTHENTICATION}\n')
 
     # as desired, use env variable: export SQLALCHEMY_DATABASE_URI='sqlite:////Users/val/dev/servers/docker_api_logic_project/database/db.sqliteXX'
@@ -197,7 +206,16 @@ class Config:
     if landing_db_path.exists():
         app_logger.info(f'config.py - SQLALCHEMY_DATABASE_URI_LANDING: {SQLALCHEMY_DATABASE_URI_LANDING}\n')
 
-    # End Multi-Database URLs (from ApiLogicServer add-db...)
+
+    SQLALCHEMY_DATABASE_URI_MCP = 'sqlite:///../database/mcp_db.sqlite'
+    app_logger.info(f'config.py - SQLALCHEMY_DATABASE_URI_MCP: {SQLALCHEMY_DATABASE_URI_MCP}\n')
+
+    # as desired, use env variable: export SQLALCHEMY_DATABASE_URI='sqlite:////Users/val/dev/servers/docker_api_logic_project/database/db.sqliteXX'
+    if os.getenv('SQLALCHEMY_DATABASE_URI_MCP'):
+        SQLALCHEMY_DATABASE_URI_MCP = os.getenv('SQLALCHEMY_DATABASE_URI_MCP')  # type: ignore # type: str
+        app_logger.debug(f'.. overridden from env variable: SQLALCHEMY_DATABASE_URI_MCP')
+
+        # End Multi-Database URLs (from ApiLogicServer add-db...)
 
     # SQLALCHEMY_ECHO = environ.get("SQLALCHEMY_ECHO")
     SQLALCHEMY_TRACK_MODIFICATIONS = False

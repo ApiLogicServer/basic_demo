@@ -1,12 +1,12 @@
 about:
-  date: May 26, 2025 06:57:17
+  date: August 09, 2025 08:12:46
   recent_changes: works with modified safrs-react-admin
   version: 0.0.0
 api_root: '{http_type}://{swagger_host}:{port}/{api}'
 authentication: '{system-default}'
 info:
   number_relationships: 4
-  number_tables: 6
+  number_tables: 5
 info_toggle_checked: true
 resources:
   Customer:
@@ -117,10 +117,10 @@ resources:
       sort: true
     - name: customer_id
       required: true
-    - name: message
     - name: subject
+    - name: message
     - name: CreatedOn
-      type: DATE
+      type: DATETIME
     tab_groups:
     - direction: toone
       fks:
@@ -129,7 +129,7 @@ resources:
       resource: Customer
     type: SysEmail
     user_key: id
-  SysMcp:
+  mcp-SysMcp:
     attributes:
     - name: request
       type: textarea

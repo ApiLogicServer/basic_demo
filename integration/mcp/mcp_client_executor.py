@@ -1,29 +1,27 @@
 """ 
-A basic MCP Client Executor, 
-which takes a natural language query and converts it into a tool context block:
-
-1. Discovers MCP servers (from config)
-2. Queries OpenAI's GPT-4 model to obtain the tool context based on a provided schema and a natural language query
+A basic MCP Client Executor: takes a natural language query and:
+1. Discovers MCP servers (from mcp_server_discovery.json)
+2. Queries OpenAI's GPT-4 model to obtain the tool context, based on a provided schema and a natural language query
 3. Processes the tool context (calls the indicated MCP (als) endpoints)
 
 To run:
-1. Run Config > MCP - Model Context Protocol - Client Executor (standalone)
-2. If you have installed SysMcp:
-    1. Open the Admin App, or
-    2. curl -X 'POST' 'http://localhost:5656/api/SysMcp/' -H 'accept: application/vnd.api+json' -H 'Content-Type: application/json' -d '{ "data": { "attributes": {"request": "List the orders date_shipped is null and CreatedOn before 2023-07-14, and send a discount email (subject: '\''Discount Offer'\'') to the customer for each one."}, "type": "SysMcp"}}
+1. Start the server (F5), and:
+2. Run this:
+    1. Terminal: python integration/mcp/mcp_client_executor.py
+    2. Or, if you have installed SysMcp:
+        1. curl -X 'POST' 'http://localhost:5656/api/SysMcp/' -H 'accept: application/vnd.api+json' -H 'Content-Type: application/json' -d '{ "data": { "attributes": {"request": "List the orders date_shipped is null and CreatedOn before 2023-07-14, and send a discount email (subject: '\''Discount Offer'\'') to the customer for each one."}, "type": "SysMcp"}}'
+        2. Or, open the Admin App:
+            * List the orders date_shipped is null and CreatedOn before 2023-07-14, and send a discount email (subject: 'Discount Offer') to the customer for each one.
 
-Notes:
-* See: integration/mcp/README_mcp.md
-* Requires ApiLogicServer: python api_logic_server_run.py
+See: https://apilogicserver.github.io/Docs/Integration-MCP/
 """
-
 
 ################
 # debug settings
 ################
 
 create_tool_context_from_llm = False
-''' set to False to bypass LLM call and save 2-3 secs in testing, no API Key required. '''
+''' set to False to bypass LLM call and OpenAI API Key requirement. '''
 
 import os, logging, logging.config, sys
 from pathlib import Path
@@ -39,6 +37,8 @@ import json
 from openai import OpenAIError
 import openai
 import requests
+from flask import Flask, request, has_request_context
+
 from logic_bank.logic_bank import Rule
 from logic_bank.exec_row_logic.logic_row import LogicRow
 from database import models
@@ -49,6 +49,8 @@ openai.api_key = os.getenv("APILOGICSERVER_CHATGPT_APIKEY")
 
 log = logging.getLogger('integration.mcp')
 
+default_query = "List customers with credit_limit > 1000."
+default_query_email = "List the orders date_shipped is null and CreatedOn before 2023-07-14, and send a discount email (subject: 'Discount Offer') to the customer for each one."
 
 def discover_mcp_servers() -> str:
     """Discover MCP servers (aka 'tools'), and retrieve their API learnings and schemas.
@@ -142,13 +144,15 @@ def query_llm_with_nl(learnings_and_schema: str, nl_query: str):
             temperature=0.2
         )
         tool_context_str = response.choices[0].message.content
-    else:
+    else:  # this is so folks can try mcp without an OpenAI API key
         # read integration/mcp/mcp_tool_context.json
-        tool_context_file_path = os.path.join(os.path.dirname(__file__), "../../integration/mcp/examples/mcp_tool_context_response.json")
+        tool_context_file_path = os.path.join(os.path.dirname(__file__), "../../integration/mcp/examples/mcp_tool_context_response_get.json")
+        if 'email' in nl_query:
+            tool_context_file_path = os.path.join(os.path.dirname(__file__), "../../integration/mcp/examples/mcp_tool_context_response.json")
         try:    
             with open(tool_context_file_path, "r") as tool_context_file:
                 tool_context_str = tool_context_file.read()
-                # log.info(f"\n\n2c. Tool context from file {tool_context_file_path}:\n" + tool_context_str)
+                log.info(f"\n\n2c. Tool context from file {tool_context_file_path}:\n" + tool_context_str)
         except FileNotFoundError:
             raise ConstraintException(f"Tool context file not found at {tool_context_file_path}.")
 
@@ -219,28 +223,6 @@ def process_tool_context(tool_context):
             query_param_filter = query_param_filter.replace('"null"', 'null')
             # query_param_filter = query_param_filter.replace("date_created", 'CreatedOn')  # TODO - why this name?
             return query_param_filter  # end get_query_param_filter
-
-    def print_get_response(query_param_filter, mcp_response):
-        """ Print the response from the GET request. """
-        log.info("\n3. MCP Server (als) GET filter(query_param_filter):\n" + query_param_filter)
-        log.info("     GET Response:\n" + mcp_response.text)
-        results : List[Dict] = mcp_response.json()['data']
-        # print results in a table format
-        if results:
-            # Get all unique keys from all result dicts
-            keys = set()
-            for row in results:
-                if isinstance(row, dict):
-                    keys.update(row.keys())
-            keys = list(keys)
-            # Print header
-            log.info("\n| " + " | ".join(keys) + " |")
-            log.info("|" + "|".join(["---"] * len(keys)) + "|")
-            # Print rows
-            for row in results:
-                log.info("| " + " | ".join(str(row.get(k, "")) for k in keys) + " |")
-        else:
-            log.info("No results found.")
 
     def substitute_vars(val, context, row=None, ref_index=None):
         """
@@ -347,17 +329,18 @@ def process_tool_context(tool_context):
             body = step.get("body", []) 
             # iterate the body fields / values
             # This loop checks each field in the body for a fan-out pattern
-            for attr_name, attr_value in body.items():
-                if isinstance(attr_value, str) and "[*]" in attr_value:
-                    match = re.match(r"\$(\d+)\[\*\]\.(\w+)", attr_value)
-                    if match:
-                        return int(match.group(1)), match.group(2)
-            # If the body is a list, iterate through each field
-            for field in body:
-                if isinstance(field["value"], str) and "[*]" in field["value"]:  # string indices must be integers, not 'str'
-                    match = re.match(r"\$(\d+)\[\*\]\.(\w+)", field["value"])
-                    if match:
-                        return int(match.group(1)), match.group(2)
+            if body is not None:
+                for attr_name, attr_value in body.items():
+                    if isinstance(attr_value, str) and "[*]" in attr_value:
+                        match = re.match(r"\$(\d+)\[\*\]\.(\w+)", attr_value)
+                        if match:
+                            return int(match.group(1)), match.group(2)
+                # If the body is a list, iterate through each field
+                for field in body:
+                    if isinstance(field["value"], str) and "[*]" in field["value"]:  # string indices must be integers, not 'str'
+                        match = re.match(r"\$(\d+)\[\*\]\.(\w+)", field["value"])
+                        if match:
+                            return int(match.group(1)), match.group(2)
         return None
 
 
@@ -401,8 +384,14 @@ Based on this, generate the next tool_context step(s) as a JSON list.
         log.info(f"    Method: {method} {url}")
         log.info(f"    Query:  {params}")
         log.info(f"    Body:   {body}\n")
+
+        headers = {}
+        if has_request_context():
+            headers = request.headers  # get headers from Flask request context
+        else:
+            log.info("Warning: No Flask request context available. Some API calls may not work as expected.")
         try:
-            resp = requests.request(method, url, json=body if method in ["POST", "PATCH"] else None, params=params)
+            resp = requests.request(method, url, headers=headers, json=body if method in ["POST", "PATCH"] else None, params=params)
             resp.raise_for_status()
             return resp.json()
         except requests.RequestException as e:
@@ -436,7 +425,75 @@ Based on this, generate the next tool_context step(s) as a JSON list.
             context_results.append(result)
         step_num += 1
 
-    log.info("\n✅ MCP Client Executor – All Steps Executed\n")
+    def print_json_as_table(json_data, step_index):
+        """Print JSON data in table format showing only data/attributes section with column headers."""
+        if not isinstance(json_data, dict):
+            log.info(f"\nStep {step_index}: Non-dict result - {json_data}")
+            return
+            
+        # Extract data section
+        data = json_data.get('data', [])
+        if not data:
+            log.info(f"\nStep {step_index}: No data found in result")
+            return
+            
+        # Handle both single item and list of items
+        if isinstance(data, dict):
+            data = [data]
+        elif not isinstance(data, list):
+            log.info(f"\nStep {step_index}: Data is not in expected format")
+            return
+            
+        # Extract attributes from all items to get all possible columns
+        all_attributes = set()
+        attribute_rows = []
+        
+        for item in data:
+            if isinstance(item, dict) and 'attributes' in item:
+                attributes = item['attributes']
+                all_attributes.update(attributes.keys())
+                attribute_rows.append(attributes)
+            else:
+                # If no attributes section, use the item directly
+                if isinstance(item, dict):
+                    all_attributes.update(item.keys())
+                    attribute_rows.append(item)
+        
+        if not attribute_rows:
+            log.info(f"\nStep {step_index}: No attributes found in data")
+            return
+            
+        # Sort columns for consistent display
+        columns = sorted(list(all_attributes))
+        
+        # Calculate column widths
+        col_widths = {}
+        for col in columns:
+            col_widths[col] = max(len(str(col)), 
+                                max(len(str(row.get(col, ""))) for row in attribute_rows))
+        
+        # Print table header
+        log.info(f"\nStep {step_index} - Results ({len(attribute_rows)} rows):")
+        header = "| " + " | ".join(col.ljust(col_widths[col]) for col in columns) + " |"
+        separator = "|" + "|".join("-" * (col_widths[col] + 2) for col in columns) + "|"
+        
+        log.info(header)
+        log.info(separator)
+        
+        # Print table rows
+        for row in attribute_rows:
+            row_str = "| " + " | ".join(str(row.get(col, "")).ljust(col_widths[col]) for col in columns) + " |"
+            log.info(row_str)
+
+    if print := True:  # print context (which is just the GETs)
+        log.info("\n\n4. MCP Client Executor – Context Results:")
+        for each_context_result in context_results:
+            step_index = context_results.index(each_context_result)
+            print_json_as_table(each_context_result, step_index)
+        pass
+
+    log.info("\n✅ MCP Client Executor – All Steps Executed - Review Results Above")
+    log.info(".. 💡 Suggestion - Copy/Paste Response to a JsonFormatter\n")
 
     return context_results 
 
@@ -448,7 +505,9 @@ def mcp_client_executor(query: str):
     #als: create an MCP request.  See https://apilogicserver.github.io/Docs/Integration-MCP/
 
     Test:
+    * als add-auth --provider-type=None 
     * curl -X 'POST' 'http://localhost:5656/api/SysMcp/' -H 'accept: application/vnd.api+json' -H 'Content-Type: application/json' -d '{ "data": { "attributes": {"request": "List the orders date_shipped is null and CreatedOn before 2023-07-14, and send a discount email (subject: '\''Discount Offer'\'') to the customer for each one."}, "type": "SysMcp"}}'
+
     * Or, use the Admin App and insert a row into SysMCP (see default `query`, below)
 
     Args:
@@ -476,9 +535,11 @@ if __name__ == "__main__":  # F5 to start API Logic Server
             f.close()
     logging.config.dictConfig(config)  # log levels: notset 0, debug 10, info 20, warn 30, error 40, critical 50
 
+    query = default_query  # default query if no argument is provided
+    
     if len(sys.argv) > 1:  # if 1 non-blank argument, use it as the query
         query = sys.argv[1]
-        if query == '':
-            query = "List the orders date_shipped is null and CreatedOn before 2023-07-14, and send a discount email (subject: 'Discount Offer') to the customer for each one."
+        if query == 'mcp':
+            query = default_query_email
 
     mcp_client_executor(query)

@@ -1,27 +1,39 @@
 #!/usr/bin/env python3
 
 ###############################################################################
+# 🚀 API Logic Server - AUTO-GENERATED MICROSERVICE
 #
-#    This file initializes and starts the API Logic Server, e.g.:
-#        $ Use your IDE Run Configurations (for debug)
-#        $ sh run.sh
-#        $ python3 api_logic_server_run.py [--help]
-#        $ gunicorn --log-level=info -b 0.0.0.0:5656 -w2 --reload api_logic_server_run:flask_app
+# This file starts a COMPLETE, WORKING microservice with:
+#   ✅ Admin Web App at http://localhost:5656 (React-based, multi-table CRUD)
+#   ✅ JSON:API endpoints at http://localhost:5656/api/* (auto-generated from database)
+#   ✅ Swagger documentation at http://localhost:5656/api
+#   ✅ Business logic engine (declarative rules)
+#   ✅ Security framework (authentication/authorization)
 #
-#    Then, access the Admin App and API via the Browser, eg:  
-#        http://localhost:5656
+# 🎯 TO RUN:
+#    Press F5 in VSCode, or run: python api_logic_server_run.py
+#
+# 🌐 TO ACCESS:
+#    Admin App: http://localhost:5656
+#    API Docs:  http://localhost:5656/api
+#
+# 📝 TO CUSTOMIZE:
+#    See docs/COPILOT_GUIDE.md for GitHub Copilot guidance
+#    Logic: logic/declare_logic.py
+#    API: api/customize_api.py
+#    Security: security/declare_security.py
 #
 #    You typically do not customize this file.
 #
-#    (v 15.00.07, June 07, 2025 13:16:06)
+#    (v 15.00.38, July 06, 2025 22:11:00)
 #
 #    See Main Code (at end).
 #        Use log messages to understand API and Logic activation.
 #
 ###############################################################################
 
-api_logic_server__version = '15.00.07'
-api_logic_server_created__on = 'June 07, 2025 13:16:06'
+api_logic_server__version = '15.00.65'
+api_logic_server_created__on = 'August 09, 2025 08:12:46'
 api_logic_server__host = 'localhost'
 api_logic_server__port = '5656'
 
@@ -103,7 +115,7 @@ server_setup.api_logic_server_setup(flask_app, args)
 AdminLoader.admin_events(flask_app = flask_app, args = args, validation_error = ValidationError)
 
 if __name__ == "__main__":
-    msg = f'API Logic Project loaded (not WSGI), version: 15.00.07\n'
+    msg = f'API Logic Project loaded (not WSGI), version: 15.00.65\n'
     msg += f'.. startup message: {start_up_message}\n'
     if server_setup.is_docker():
         msg += f' (running from docker container at flask_host: {args.flask_host} - may require refresh)\n'
@@ -136,7 +148,7 @@ if __name__ == "__main__":
 
     flask_app.run(host=args.flask_host, threaded=True, port=args.port)
 else:
-    msg = f'API Logic Project Loaded (WSGI), version 15.00.07\n'
+    msg = f'API Logic Project Loaded (WSGI), version 15.00.65\n'
     msg += f'.. startup message: {start_up_message}\n'
 
     if server_setup.is_docker():
