@@ -17,11 +17,11 @@ Use this to explore the`basic_demo`, created from [this procedure](https://apilo
 See readme files under api, logic and security.
 
 **🚀 Ready to Run:** This is a complete, working system. 
-- To Run:
+- **To Run:**
     * Local IDE: just press F5 or run `python api_logic_server_run.py`
     * GitHub:
         1. Open [this project](https://github.com/ApiLogicServer/basic_demo?tab=readme-ov-file#readme)
-        2. At top, click code dropdown >> select codespaces >> Create codespace on main
+        2. At top, click **Code* dropdown >> select **codespaces** >> **Create codespace on main**
         3. Wait for it to load, then click F5
 - In the Admin App, access Customer `Alice`, order 2
     * Change the quantity to a very large value - observe the constraint
