@@ -13,12 +13,12 @@ def declare_logic():
     """
     Check Credit Use Case Logic
     
-    Natural Language Requirements:
-    1. The Customer's balance is less than the credit limit
-    2. The Customer's balance is the sum of the Order amount_total where date_shipped is null
-    3. The Order's amount_total is the sum of the Item amount
-    4. The Item amount is the quantity * unit_price
-    5. The Item unit_price is copied from the Product unit_price
+    Key Points:
+    1. This logic was derived from Natural Language (included as comments below)
+    2. It maintains the abstraction level: 5 rules, not 200 lines of FrankenCode
+    3. As code, it works with Source Control, the debugger, code completion, and other tools
+    4. It is automatically ordered, which simplified maintenance  (no more hunting for the right place to add a rule)
+    5. It is automatically called, which ensures consistency and reduces errors through reuse over all Use Cases
     """
     
     # 1. The Customer's balance is less than the credit limit

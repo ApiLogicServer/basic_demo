@@ -24,7 +24,9 @@ See readme files under api, logic and security.
         1. Open [this project](https://github.com/ApiLogicServer/basic_demo?tab=readme-ov-file#readme)
         2. At top, click **Code** >> dropdown and click tab **Codespaces** >> **Create codespace on main**
         3. Wait for it to load, then click F5
-- In the Admin App, access Customer `Alice`, order 2
+- Set a breakpoint, e.g.
+    * Line 26 in `logic/logic_discovery/check_credit.py`
+- In the Admin App, access Customer `Alice`, order 2 (`Second Order`)
     * Change the quantity to a very large value - observe the constraint
     * Lookup product *Thingamajig* - constraint **(rule) is re-used** for this transaction
 
