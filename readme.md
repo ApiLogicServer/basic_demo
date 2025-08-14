@@ -18,7 +18,8 @@ See readme files under api, logic and security.
 
 **🚀 Ready to Run:** This is a complete, working system. 
 - **To Run:**
-    * Local IDE: just press F5 or run `python api_logic_server_run.py`
+    * Local IDE: 
+        1. Press F5 or run `python api_logic_server_run.py`
     * GitHub:
         1. Open [this project](https://github.com/ApiLogicServer/basic_demo?tab=readme-ov-file#readme)
         2. At top, click **Code** >> dropdown and click tab **Codespaces** >> **Create codespace on main**
