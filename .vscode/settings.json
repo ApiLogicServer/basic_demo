@@ -36,5 +36,6 @@
     "terminal.integrated.defaultProfile.linux": "venv",
     "workbench.editorAssociations": {
         "*.md": "vscode.markdown.preview.editor"
-    }
+    },
+    "dbmlERDPreviewer.preferredTheme": "light"
 }
