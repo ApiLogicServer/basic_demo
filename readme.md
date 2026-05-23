@@ -39,7 +39,7 @@ Security is not enabled, so no login is required.
 |---|---|
 | JSON:API | Auto-generated REST for all tables at `/api` |
 | Admin UI | Full CRUD at `/admin-app` |
-| Business Rules | 5 declarative rules in `logic/logic_discovery/place_order/` (vs 200 lines of code - see [declarative vs. procedural](logic/declarative-vs-procedural-comparison.html)) |
+| Business Rules | 5 declarative rules in `logic/logic_discovery/place_order/` (vs 200 lines of code - see [declarative vs. procedural](logic/procedural/declarative-vs-procedural-comparison.md)) |
 | Logic Diagram | [Rule chain visualization](docs/requirements/logic_flow_basic_demo.md) |
 | Governance Report | [Coverage + integrity scores](docs/requirements/health_check.md) |
 | Behave Tests | [7 scenarios, 100% pass](test/api_logic_server_behave/reports/Behave%20Logic%20Report.md) |
