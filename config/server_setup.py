@@ -102,7 +102,11 @@ from safrs import ValidationError, SAFRSBase, SAFRSAPI
 import ui.admin.admin_loader as AdminLoader
 from security.system.authentication import configure_auth
 import database.bind_dbs as bind_dbs
-import oracledb
+try:
+    import oracledb
+except ImportError:
+    oracledb = None
+    # Oracle support not available on this platform
 import integration.kafka.kafka_producer as kafka_producer
 import integration.kafka.kafka_consumer as kafka_consumer
 import integration.n8n.n8n_producer as n8n_producer
@@ -286,6 +290,9 @@ class ValidationErrorExt(ValidationError):
         self.message = message
         self.api_code = api_code
         self.detail: TypedDict = detail
+
+    def __str__(self):
+        return self.message
 
 
 def validate_db_uri(flask_app):

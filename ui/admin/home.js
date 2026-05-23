@@ -30,11 +30,6 @@ const sla_doc =
     '       <a class="custom" style="color: #3f51b5" rel="nofollow" href="https://github.com/valhuber/LogicBank/wiki/by-code" title="Rules are 40X more concise than code, and address over 95% of database logic" target="_blank">conciseness</a> ' +
     '       and quality</li>' +
     '</ul>' +
-    '<h4>4. MCP-enabled, to <span class="JoinedField" title="Often nearly half the app -- automation required"><span>Enable Bus Users to use Natural Language to create multi-step execution flows</span> </span></h4>'+
-    '<ul>' +
-    '   <li>For more information, <a class="custom" style="color: #3f51b5" rel="nofollow" href="https://apilogicserver.github.io/Docs/Integration-MCP/" target="_blank">Click here</a></li>' +
-    '   <li>Create a new SysMcp, and enter: List the orders date_shipped is null and CreatedOn before 2023-07-14, and send a discount email (subject: \'Discount Offer\') to the customer for each one.</li>' +
-    '</ul>' +
     '</div>'
 
 

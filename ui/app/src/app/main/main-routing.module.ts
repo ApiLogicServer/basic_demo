@@ -13,13 +13,7 @@ export const routes: Routes = [
         { path: 'settings', loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule) },
       
     
-        { path: 'Customer', loadChildren: () => import('./Customer/Customer.module').then(m => m.CustomerModule) },
-    
-        { path: 'Item', loadChildren: () => import('./Item/Item.module').then(m => m.ItemModule) },
-    
-        { path: 'Order', loadChildren: () => import('./Order/Order.module').then(m => m.OrderModule) },
-    
-        { path: 'Product', loadChildren: () => import('./Product/Product.module').then(m => m.ProductModule) },
+        { path: 'SysConfig', loadChildren: () => import('./SysConfig/SysConfig.module').then(m => m.SysConfigModule) },
     
     ]
   }

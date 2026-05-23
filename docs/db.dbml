@@ -4,11 +4,10 @@
 
 Table Customer {
     id INTEGER [primary key]
-    name VARCHAR 
-    balance DECIMAL 
-    credit_limit DECIMAL 
-    email VARCHAR 
-    email_opt_out BOOLEAN 
+    name TEXT 
+    email TEXT 
+    credit_limit FLOAT 
+    balance FLOAT 
     }
 
 Table Item {
@@ -16,28 +15,36 @@ Table Item {
     order_id INTEGER 
     product_id INTEGER 
     quantity INTEGER 
-    amount DECIMAL 
-    unit_price DECIMAL 
+    unit_price FLOAT 
+    amount FLOAT 
     }
 
 Table Order {
     id INTEGER [primary key]
-    notes VARCHAR 
     customer_id INTEGER 
-    CreatedOn DATE 
-    date_shipped DATE 
-    amount_total DECIMAL 
+    date_ordered TEXT 
+    date_shipped TEXT 
+    notes TEXT 
+    amount_total FLOAT 
     }
 
 Table Product {
     id INTEGER [primary key]
-    name VARCHAR 
-    unit_price DECIMAL 
+    name TEXT 
+    unit_price FLOAT 
+    }
+
+Table SysConfig {
+    id INTEGER [primary key]
+    name TEXT 
+    discount_rate FLOAT 
+    tax_rate FLOAT 
+    notes TEXT 
     }
 
 
 
 // Relationships
-    Ref: Item.(order_id) < Order.(id)
-    Ref: Item.(product_id) < Product.(id)
-    Ref: Order.(customer_id) < Customer.(id)
+    Ref: Item.(order_id) > Order.(id)
+    Ref: Item.(product_id) > Product.(id)
+    Ref: Order.(customer_id) > Customer.(id)

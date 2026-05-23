@@ -13,10 +13,10 @@ export const CONFIG: Config = {
   // Application identifier. Is the unique package identifier of the app.
   // It is used when storing or managing temporal data related with the app.
   // By default is set as 'ontimize-web-uuid'.
-  uuid: 'com.ontimize.web.ngx.basic_demo',
+  uuid: 'com.ontimize.web.ngx..',
 
   // Title of the app
-  title: 'ApiLogicServer basic_demo',
+  title: 'ApiLogicServer .',
 
   //  Language of the application.
   locale: 'en',

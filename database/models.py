@@ -1,6 +1,6 @@
 # coding: utf-8
 from sqlalchemy import DECIMAL, DateTime  # API Logic Server GenAI assist
-from sqlalchemy import Boolean, Column, DECIMAL, Date, ForeignKey, Integer, String
+from sqlalchemy import Column, Float, ForeignKey, Integer, Text, text
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -10,8 +10,8 @@ from sqlalchemy.ext.declarative import declarative_base
 # Alter this file per your database maintenance policy
 #    See https://apilogicserver.github.io/Docs/Project-Rebuild/#rebuilding
 #
-# Created:  August 09, 2025 08:12:46
-# Database: sqlite:////Users/val/dev/ApiLogicServer/ApiLogicServer-dev/build_and_test/ApiLogicServer/basic_demo/database/db.sqlite
+# Created:  May 23, 2026 07:31:03
+# Database: sqlite:////Users/val/dev/ApiLogicServer/ApiLogicServer-dev/build_and_test/genai-logic/basic_demo/database/db.sqlite
 # Dialect:  sqlite
 #
 # mypy: ignore-errors
@@ -49,34 +49,15 @@ class Customer(Base):  # type: ignore
     _s_collection_name = 'Customer'  # type: ignore
 
     id = Column(Integer, primary_key=True)
-    name = Column(String)
-    balance : DECIMAL = Column(DECIMAL)
-    credit_limit : DECIMAL = Column(DECIMAL)
-    email = Column(String)
-    email_opt_out = Column(Boolean)
+    name = Column(Text, nullable=False)
+    email = Column(Text)
+    credit_limit = Column(Float, server_default=text("1000.0"))
+    balance = Column(Float, server_default=text("0.0"))
 
     # parent relationships (access parent)
 
     # child relationships (access children)
     OrderList : Mapped[List["Order"]] = relationship(back_populates="customer")
-    SysEmailList : Mapped[List["SysEmail"]] = relationship(back_populates="customer")
-
-
-
-class SysEmail(Base):  # type: ignore
-    __tablename__ = 'sysemail'
-    _s_collection_name = 'SysEmail'  # type: ignore
-
-    id = Column(Integer, primary_key=True)
-    message = Column(String)
-    subject = Column(String)
-    customer_id = Column(ForeignKey('customer.id'), nullable=False)
-    CreatedOn = Column(DateTime)
-
-    # parent relationships (access parent)
-    customer : Mapped["Customer"] = relationship(back_populates=("SysEmailList"))
-
-    # child relationships (access children)
 
 
 
@@ -85,8 +66,8 @@ class Product(Base):  # type: ignore
     _s_collection_name = 'Product'  # type: ignore
 
     id = Column(Integer, primary_key=True)
-    name = Column(String)
-    unit_price : DECIMAL = Column(DECIMAL)
+    name = Column(Text, nullable=False)
+    unit_price = Column(Float, nullable=False)
 
     # parent relationships (access parent)
 
@@ -95,16 +76,32 @@ class Product(Base):  # type: ignore
 
 
 
+class SysConfig(Base):  # type: ignore
+    __tablename__ = 'sys_config'
+    _s_collection_name = 'SysConfig'  # type: ignore
+
+    id = Column(Integer, primary_key=True)
+    name = Column(Text, server_default=text("'system'"), nullable=False)
+    discount_rate = Column(Float, server_default=text("0.05"))
+    tax_rate = Column(Float, server_default=text("0.10"))
+    notes = Column(Text)
+
+    # parent relationships (access parent)
+
+    # child relationships (access children)
+
+
+
 class Order(Base):  # type: ignore
     __tablename__ = 'order'
     _s_collection_name = 'Order'  # type: ignore
 
     id = Column(Integer, primary_key=True)
-    notes = Column(String)
     customer_id = Column(ForeignKey('customer.id'), nullable=False)
-    CreatedOn = Column(Date)
-    date_shipped = Column(Date)
-    amount_total : DECIMAL = Column(DECIMAL)
+    date_ordered = Column(Text)
+    date_shipped = Column(Text)
+    notes = Column(Text)
+    amount_total = Column(Float, server_default=text("0.0"))
 
     # parent relationships (access parent)
     customer : Mapped["Customer"] = relationship(back_populates=("OrderList"))
@@ -119,11 +116,11 @@ class Item(Base):  # type: ignore
     _s_collection_name = 'Item'  # type: ignore
 
     id = Column(Integer, primary_key=True)
-    order_id = Column(ForeignKey('order.id'))
+    order_id = Column(ForeignKey('order.id'), nullable=False)
     product_id = Column(ForeignKey('product.id'), nullable=False)
-    quantity = Column(Integer, nullable=False)
-    amount : DECIMAL = Column(DECIMAL)
-    unit_price : DECIMAL = Column(DECIMAL)
+    quantity = Column(Integer, server_default=text("1"), nullable=False)
+    unit_price = Column(Float, server_default=text("0.0"))
+    amount = Column(Float, server_default=text("0.0"))
 
     # parent relationships (access parent)
     order : Mapped["Order"] = relationship(back_populates=("ItemList"))

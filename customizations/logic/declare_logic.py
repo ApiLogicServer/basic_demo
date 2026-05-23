@@ -32,7 +32,28 @@ def declare_logic():
         from logic.logic_discovery.auto_discovery import discover_logic
         discover_logic()
 
-    # Logic from GenAI: (or, use your IDE w/ code completion)
+    # Logic from GenAI
+    '''
+    You can enter logic in 2 ways:
+        1. Using your IDE and code completion (Rule.)
+
+        2. Use your AI Assistant and enter logic in Natural Language, e.g.:
+            Create Business Logic for Use Case = Check Credit:  
+                1. The Customer's balance is less than the credit limit
+                2. The Customer's balance is the sum of the Order amount_total where date_shipped is null
+                3. The Order's amount_total is the sum of the Item amount
+                4. The Item amount is the quantity * unit_price
+                5. The Item unit_price is copied from the Product unit_price
+
+            Use case: App Integration
+                1. Send the Order to Kafka topic 'order_shipping' if the date_shipped is not None.
+    
+    Also, using logic/logic_discovery is a Best Practice - see logic/readme_logic.md
+
+    The 5 *declarative* lines below represent the same logic as 200 lines of *declarative* Python
+        1. To view the AI procedural/declarative comparison, [click here](https://github.com/ApiLogicServer/ApiLogicServer-src/blob/main/api_logic_server_cli/prototypes/basic_demo/logic/procedural/declarative-vs-procedural-comparison.md)
+        2. Consider a 100 table system: 1,000 rules vs. 40,000 lines of code
+    '''
     from database.models import Product, Order, Item, Customer, SysEmail
 
     # Ensure the customer's balance is less than their credit limit
