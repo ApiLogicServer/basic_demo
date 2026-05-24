@@ -77,4 +77,20 @@ Every developer insists on a database diagram — you cannot engage with a syste
 | [Governance Report](docs/requirements/health_check.md) | Coverage + integrity scores — manage 1 project, or a portfolio |
 | [Behave Tests](test/api_logic_server_behave/reports/Behave%20Logic%20Report.md) | 7 scenarios, 100% pass — generated from the rules; report shows log of each rule execution |
 
+&nbsp;
+
+## How It Works: Logic Governance Architecture
+
+
+1. **Context Engineering** directs AI to generate Data Rules — not procedural code. Without it, AI pattern-matches to FrankenCode. With it, intent becomes declarations.  This is genned into your project at `docs/training`.
+
+2. **Data Rules** distill path-dependent logic into *path-independent rules on data*. They are Python source — `Rule.constraint`, `Rule.sum`. No missed paths. Every path inherits them automatically.
+
+3. The **Commit Listener** hooks into the ORM commit. Every transaction — API, agent, workflow — passes through one control point. Nothing bypasses it.
+
+4. The **Rule Engine** computes dependency order from the Data Rules at startup — deterministically. No pattern-matching, no subtle ordering bugs.
+
+![Logic Governance Architecture](https://github.com/ApiLogicServer/Docs/blob/main/docs/images/architecture/logic-architecture.png?raw=true)
+
+
 For more on Governance, [click here](https://apilogicserver.github.io/Docs/IDE-Health-Check/).
