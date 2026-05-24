@@ -1,6 +1,6 @@
 # GenAI-Logic Basic Demo
 
-A working microservice — API, admin UI, and business rules — generated from a short prompt. The goal is to show how **declarative rules** address the governance problem at the core of enterprise logic.
+A working system — API, admin UI, and business rules — generated from a short prompt. The goal is to show how **declarative rules** address the governance problem at the core of enterprise logic.
 
 ## The Prompt
 
@@ -29,17 +29,17 @@ pip install -r requirements.txt
 python api_logic_server_run.py
 ```
 
-Then open: http://localhost:5656 (no login required — security is disabled in this demo).
+Then open: http://localhost:5656 (no login required — security is not enabled in this demo).
 
 &nbsp;
 
 ## What Runs
 
-| Artifact | Description |
-|---|---|
-| JSON:API | Auto-generated REST for all tables at `/api` |
-| Admin UI | Full CRUD at `/admin-app` |
-| Business Rules | 5 declarative rules in `logic/logic_discovery/place_order/` |
+| Artifact | Description | Notes |
+|---|---|---|
+| JSON:API | Auto-generated REST for all tables at `/api` | Pagination, optimistic locking, filtering/sorting, swagger |
+| Admin UI | Full CRUD at `/admin-app` | Multi-table - navigations, lookups etc |
+| Business Rules | 5 declarative rules in `logic/logic_discovery/place_order/` | Governs all ORM CRUD operations |
 
 &nbsp;
 
@@ -47,9 +47,9 @@ Then open: http://localhost:5656 (no login required — security is disabled in 
 
 Business logic — multi-table derivations, constraints, and side-effects like messaging — is typically **40–50% of coding and debugging effort**. Versata measured this across production deployments: declarative rules required writing only 3% of equivalent procedural code.
 
-Standard AI can generate procedural code: here is [what Copilot produced](logic/procedural/credit_service.py) from the same requirements above — **204 lines, with 2 subtle bugs** (documented in the [A/B comparison](logic/procedural/declarative-vs-procedural-comparison.md)).
+Standard AI can generate *procedural* code: here is [what Copilot produced](logic/procedural/credit_service.py) from the same requirements above — **~200 lines, with 2 subtle bugs** (documented in the [A/B comparison](logic/procedural/declarative-vs-procedural-comparison.md)).
 
-GenAI-Logic uses context engineering to make AI generate **rules instead**: [5 executable lines](logic/logic_discovery/place_order/check_credit.py).
+GenAI-Logic uses [context engineering](docs/training/logic_bank_api.md) to make AI generate **declarative rules instead**: [5 executable lines](logic/logic_discovery/place_order/check_credit.py).
 
 The reduction matters because of these structural properties:
 
