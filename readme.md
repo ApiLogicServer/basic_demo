@@ -55,23 +55,26 @@ The reduction matters because of these structural properties:
 
 | Property | Procedural Code | Declarative Rules |
 |---|---|---|
-| **Readability** | Intent buried in implementation — maintainers see *how*, not *what* | **Direct translation of requirements** — intent visible without tracing code |
+| **Readability** | Intent buried in implementation — maintainers see *how*, not *what* | **The rule is the requirement** — business and tech read the same artifact, no translation gap |
 | **Correctness** | [A/B test](logic/procedural/declarative-vs-procedural-comparison.md) uncovered 2 bugs in Copilot-generated code | **Automatic reuse over all change paths** (insert, update, delete, FK reassignment) |
 | **Maintainability** | Adding logic requires finding every call site and insertion point | **Auto-ordered** at startup via dependency graph — add a rule anywhere, engine places it correctly |
 | **Enforcement** | Must be explicitly called — can be bypassed or forgotten | **No bypass** — listens to `before_flush`, every ORM write runs rules automatically |
+| **Iteration** | Evolving requirements mean patching a growing codebase — regenerating risks regressions as codebase grows | **Each rule is independent** — add or change one rule, engine handles all downstream consequences |
 
-These properties are what make rules a governance mechanism, not just a style preference.
+These properties are what make rules a governance mechanism, not just a style preference. Every transaction traces to the rule that governed it — compliance teams can verify governance, not merely assert it.
 
 &nbsp;
 
 ## Governance Reports
 
-Rules are the foundation, but governance also requires visibility — that the logic is correct, complete, and tested. These reports provide that. And because rules are structured and machine-readable, the system can generate tests directly from them — a downstream consequence of the rules themselves being unambiguous:
+Rules are the foundation, but governance also requires visibility — that the logic is correct, complete, and tested. These reports provide that. And because rules are structured and machine-readable, the system can generate tests directly from them — a downstream consequence of the rules themselves being unambiguous.
+
+Every developer insists on a database diagram — you cannot engage with a system you cannot visualize. The same is true for logic. Without a logic diagram, onboarding means reading code to reconstruct dependency chains mentally; supporting or maintaining an unfamiliar system means drawing it by hand before you can reason about consequences. The logic diagram here is auto-generated from the rules, so it cannot drift from the code. It is the logic equivalent of a db diagram — and just as essential.
 
 | Artifact | Description |
 |---|---|
-| Logic Diagram | [Requirements, logic diagram, and rules summary](docs/requirements/logic_flow_basic_demo.md) |
-| Governance Report | [Coverage + integrity scores](docs/requirements/health_check.md) |
-| Behave Tests | [7 scenarios, 100% pass — generated from the rules](test/api_logic_server_behave/reports/Behave%20Logic%20Report.md) |
+| [Logic Diagram](docs/requirements/logic_flow_basic_demo.md) | Requirements, logic diagram, and rules summary — db diagram for logic |
+| [Governance Report](docs/requirements/health_check.md) | Coverage + integrity scores — manage 1 project, or a portfolio |
+| [Behave Tests](test/api_logic_server_behave/reports/Behave%20Logic%20Report.md) | 7 scenarios, 100% pass — generated from the rules; report shows log of each rule execution |
 
 For more on Governance, [click here](https://apilogicserver.github.io/Docs/IDE-Health-Check/).
