@@ -94,3 +94,9 @@ Every developer insists on a database diagram — you cannot engage with a syste
 
 
 For more on Governance, [click here](https://apilogicserver.github.io/Docs/IDE-Health-Check/).
+
+&nbsp;
+
+---
+
+Ready to try it? Return to the Manager and open **🚀 First Time Here? → 🔨 Do it** to create `basic_demo` and take the 30-minute hands-on tour.
