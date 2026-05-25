@@ -1,3 +1,12 @@
+---
+title: basic_demo (github) and basic_demo_logic_gov (manager/samples)
+Description: Logic only (no EAI, Security, B2B)
+URL: https://github.com/ApiLogicServer/basic_demo
+Dev Clone at: ApiLogicServer-dev/org_git/basic_demo
+copy to gold source: api_logic_server_cli/prototypes/manager/samples/basic_demo_logic_gov - no .git
+version info: 17.00.27 (05/24/2026)
+---
+
 # GenAI-Logic Basic Demo
 
 A working system — API, admin UI, and business rules — generated from a short prompt. The goal is to show how **declarative rules** address the governance problem at the core of enterprise logic.
