@@ -3,7 +3,7 @@ title: basic_demo (github) and basic_demo_logic_gov (manager/samples)
 Description: Logic only (no EAI, Security, B2B)
 URL: https://github.com/ApiLogicServer/basic_demo
 Dev Clone at: ApiLogicServer-dev/org_git/basic_demo
-copy to gold source: api_logic_server_cli/prototypes/manager/samples/basic_demo_logic_gov - no .git
+copy to gold source: cp -r ApiLogicServer-dev/org_git/basic_demo/. api_logic_server_cli/prototypes/manager/samples/basic_demo_logic_gov/ (no .git)
 version info: 17.00.27 (05/24/2026)
 ---
 
@@ -80,11 +80,11 @@ Rules are the foundation, but governance also requires visibility — that the l
 
 Every developer insists on a database diagram — you cannot engage with a system you cannot visualize. The same is true for logic. Without a logic diagram, onboarding means reading code to reconstruct dependency chains mentally; supporting or maintaining an unfamiliar system means drawing it by hand before you can reason about consequences. The logic diagram here is auto-generated from the rules, so it cannot drift from the code. It is the logic equivalent of a db diagram — and just as essential.
 
-| Artifact | Description |
-|---|---|
-| [Logic Diagram](docs/requirements/logic_flow_basic_demo.md) | Requirements, logic diagram, and rules summary — db diagram for logic |
-| [Governance Report](docs/requirements/health_check.md) | Coverage + integrity scores — manage 1 project, or a portfolio |
-| [Behave Tests](test/api_logic_server_behave/reports/Behave%20Logic%20Report.md) | 7 scenarios, 100% pass — generated from the rules; report shows log of each rule execution |
+| NL Command | Artifact | Description |
+|---|---|---|
+| `create logic diagram` | [Logic Diagram](docs/requirements/logic_flow_basic_demo.md) | Requirements, logic diagram, and rules summary — db diagram for logic |
+| `health check` | [Governance Report](docs/requirements/health_check.md) | Coverage + integrity scores — manage 1 project, or a portfolio |
+| `create tests` | [Behave Tests](test/api_logic_server_behave/reports/Behave%20Logic%20Report.md) | 7 scenarios, 100% pass — generated from the rules; report shows log of each rule execution |
 
 &nbsp;
 
