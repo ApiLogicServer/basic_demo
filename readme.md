@@ -4,7 +4,7 @@ Description: Logic only (no EAI, Security, B2B)
 URL: https://github.com/ApiLogicServer/basic_demo
 Dev Clone at: ApiLogicServer-dev/org_git/basic_demo
 copy to gold source: cp -r ApiLogicServer-dev/org_git/basic_demo/. api_logic_server_cli/prototypes/manager/samples/basic_demo_logic_gov/ (no .git)
-version info: 17.00.30 (05/27/2026)
+version info: 17.00.27 (05/24/2026)
 ---
 
 # GenAI-Logic Basic Demo
@@ -78,15 +78,13 @@ These properties are what make rules a governance mechanism, not just a style pr
 
 ## Governance Reports
 
-Rules are the foundation, but governance also requires visibility — that the logic is correct, complete, and tested. These reports provide that. And because rules are structured and machine-readable, the system can generate tests directly from them — a downstream consequence of the rules themselves being unambiguous.
+Every developer insists on a database diagram — you can't engage with a system you can't visualize. The same is true for logic. Rules are machine-readable declarations, which makes three things possible that aren't possible with procedural code:
 
-Every developer insists on a database diagram — you cannot engage with a system you cannot visualize. The same is true for logic. Without a logic diagram, onboarding means reading code to reconstruct dependency chains mentally; supporting or maintaining an unfamiliar system means drawing it by hand before you can reason about consequences. The logic diagram here is auto-generated from the rules, so it cannot drift from the code. It is the logic equivalent of a db diagram — and just as essential.
-
-| NL Command | Artifact | Description |
+| NL Command | Artifact | What you get |
 |---|---|---|
-| `create logic diagram` | [Logic Diagram](docs/requirements/logic_flow_basic_demo.md) | Requirements, logic diagram, and rules summary — db diagram for logic |
-| `health check` | [Governance Report](docs/requirements/health_check.md) | Coverage + integrity scores — manage 1 project, or a portfolio |
-| `create tests` | [Behave Tests](test/api_logic_server_behave/reports/Behave%20Logic%20Report.md) | 7 scenarios, 100% pass — generated from the rules; report shows log of each rule execution |
+| `create logic diagram` | [Logic Diagram](docs/requirements/logic_flow_basic_demo.md) | Scoped per requirement — ask for "check credit" and get that dependency chain as an SVG. A 100-table system stays readable because you never diagram everything at once. Auto-generated from the rules, so it can't drift. |
+| `health check` | [Governance Report](docs/requirements/health_check.md) | Coverage and integrity scores per project. Same command works across a portfolio — comparable scores, consistent criteria. |
+| `create tests` | [Behave Tests](test/api_logic_server_behave/reports/Behave%20Logic%20Report.md) | AI reads the rules, infers what needs verifying, and writes the test scenarios. On execution, the runtime logic log is embedded in the report — requirement → rule → test → execution trace in one artifact. |
 
 &nbsp;
 
