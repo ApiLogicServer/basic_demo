@@ -4,7 +4,7 @@ Description: Logic only (no EAI, Security, B2B)
 URL: https://github.com/ApiLogicServer/basic_demo
 Dev Clone at: ApiLogicServer-dev/org_git/basic_demo
 copy to gold source: cp -r ApiLogicServer-dev/org_git/basic_demo/. api_logic_server_cli/prototypes/manager/samples/basic_demo_logic_gov/ (no .git)
-version info: 17.00.27 (05/24/2026)
+version info: 17.00.30 (05/27/2026)
 ---
 
 # GenAI-Logic Basic Demo
@@ -54,11 +54,13 @@ Then open: http://localhost:5656 (no login required — security is not enabled 
 
 ## Why Rules Matter
 
+**The AI-alone problem:** AI can generate procedural code fast. Here is [what Copilot produced](logic/procedural/credit_service.py) from the requirements above — **~200 lines of code you didn't write, don't fully understand, and now have to maintain.** That's the definition of technical debt at generation speed. Developers have a word for it: *FrankenCode*.
+
+Worse: the [A/B comparison](logic/procedural/declarative-vs-procedural-comparison.md) documents that **Copilot's code has 2 subtle bugs** that ordinary testing won't catch — both are FK re-parenting scenarios (reassign an order to a different customer, or an item to a different product) that procedural code silently misses.
+
+GenAI-Logic uses [context engineering](docs/training/logic_bank_api.md) to make AI generate **declarative rules instead**: [5 executable lines](logic/logic_discovery/place_order/check_credit.py) — code a developer can read, review, own, and trust.
+
 Business logic — multi-table derivations, constraints, and side-effects like messaging — is typically **40–50% of coding and debugging effort**. Versata measured this across production deployments: declarative rules required writing only 3% of equivalent procedural code.
-
-Standard AI can generate *procedural* code: here is [what Copilot produced](logic/procedural/credit_service.py) from the same requirements above — **~200 lines, with 2 subtle bugs** (documented in the [A/B comparison](logic/procedural/declarative-vs-procedural-comparison.md)).
-
-GenAI-Logic uses [context engineering](docs/training/logic_bank_api.md) to make AI generate **declarative rules instead**: [5 executable lines](logic/logic_discovery/place_order/check_credit.py).
 
 The reduction matters because of these structural properties:
 
